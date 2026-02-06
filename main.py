@@ -55,7 +55,7 @@ def main():
 
     # We limit dorks to run to avoid long waits in testing/sandbox
     # In production, remove max_dorks_to_run or increase it
-    raw_results = searcher.perform_search(max_dorks_to_run=3)
+    raw_results = searcher.perform_search(max_dorks_to_run=7)
 
     # 3. Verify & Enrich
     logging.info(f"Step 3: Verifying & Enriching {len(raw_results)} Results...")
