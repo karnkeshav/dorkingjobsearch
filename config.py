@@ -18,34 +18,34 @@ TARGET_KEYWORDS = [
 ]
 
 # Google Dork Templates
-# {keyword_1} and {keyword_2} placeholders are replaced dynamically from resume keywords
+# Space between terms acts as a logical AND. 
+# Use parentheses for OR logic to ensure it doesn't break the 'site:' filter.
 DORK_TEMPLATES = {
-    "ats_discovery": 'site:greenhouse.io (Director OR "Senior Director") OR "{keyword_1}" OR "{keyword_2}"',
-    "ats_discovery_lever": 'site:lever.co (Director OR "Senior Director") OR "{keyword_1}" OR "{keyword_2}"',
-    "ats_discovery_ashby": 'site:ashbyhq.com (Director OR "Senior Director") OR "{keyword_1}" OR "{keyword_2}"',
-    "ats_discovery_workday": 'site:myworkdayjobs.com (Director OR "Senior Director") OR "{keyword_1}" OR "{keyword_2}"',
+    "ats_discovery": 'site:greenhouse.io (Director OR "Senior Director") ("{keyword_1}" OR "{keyword_2}")',
+    "ats_discovery_lever": 'site:lever.co (Director OR "Senior Director") ("{keyword_1}" OR "{keyword_2}")',
+    "ats_discovery_ashby": 'site:ashbyhq.com (Director OR "Senior Director") ("{keyword_1}" OR "{keyword_2}")',
+    "ats_discovery_workday": 'site:myworkdayjobs.com (Director OR "Senior Director") ("{keyword_1}" OR "{keyword_2}")',
 
-    "hidden_documents": 'site:docs.google.com "we are hiring" OR "Director of Engineering"',
+    "hidden_documents": 'site:docs.google.com "we are hiring" (Director OR "Head of") "{keyword_1}"',
 
-    "internal_career_pages": 'intitle:"career" inurl:"/jobs" -site:linkedin.com -site:indeed.com "Director" "Cloud Strategy"',
+    "internal_career_pages": 'intitle:"career" inurl:"/jobs" -site:linkedin.com -site:indeed.com "Director" ("{keyword_1}" OR "{keyword_2}")',
 
     # "Director-Level" Dorks to Hardcode
-    "unlisted_executive_roles": 'site:lever.co OR site:greenhouse.io OR site:ashbyhq.com ("Director" OR "Head of") OR ("AI Governance" OR "FinOps") OR "Remote"',
+    "unlisted_executive_roles": '(site:lever.co OR site:greenhouse.io OR site:ashbyhq.com) ("Director" OR "Head of") ("AI Governance" OR "FinOps") "Remote"',
     "strategic_plans": 'filetype:pdf "strategic plan" 2026 "hiring" ("AI" OR "Cloud")',
     "public_hiring_lists": 'site:airtable.com "hiring" "Director" "Engineering"'
 }
 
 # LinkedIn Boolean Search Generators
-# These are templates for generating boolean strings for LinkedIn or signals
+# Removed the OR between the persona (VP/CIO) and the intent (Hiring)
 LINKEDIN_PATTERNS = {
-    "hiring_manager": '("Hiring" OR "Building my team") OR ("VP of Engineering" OR "CIO") OR "{keyword}"'
+    "hiring_manager": '("Hiring" OR "Building my team") ("VP of Engineering" OR "CIO") "{keyword}"'
 }
 
 # Search Configuration
-# To avoid being blocked by Google in GitHub Actions, increase sleep intervals
 SEARCH_CONFIG = {
     "num_results": 10,
-    "sleep_interval_min": 20, # Increased to avoid rate limiting
-    "sleep_interval_max": 40, # Increased to avoid rate limiting
+    "sleep_interval_min": 30, # Slightly increased for GitHub Action safety
+    "sleep_interval_max": 60, 
     "lang": "en"
 }
