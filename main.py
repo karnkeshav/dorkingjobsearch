@@ -35,7 +35,7 @@ def extract_company_from_url(url):
         return "Unknown"
 
 def main():
-    resume_path = "resume.pdf"
+    resume_path = "resume.docx"
     if not os.path.exists(resume_path):
         logging.error("resume.pdf not found. Please place your resume in the project root.")
         return
