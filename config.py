@@ -17,7 +17,7 @@ TARGET_KEYWORDS = [
 ]
 
 # Google Dork Templates
-# {keywords} placeholders can be replaced dynamically
+# {keyword_1} and {keyword_2} placeholders are replaced dynamically from resume keywords
 DORK_TEMPLATES = {
     "ats_discovery": 'site:greenhouse.io (Director OR "Senior Director") AND "{keyword_1}" AND "{keyword_2}"',
     "ats_discovery_lever": 'site:lever.co (Director OR "Senior Director") AND "{keyword_1}" AND "{keyword_2}"',
@@ -41,9 +41,10 @@ LINKEDIN_PATTERNS = {
 }
 
 # Search Configuration
+# To avoid being blocked by Google in GitHub Actions, increase sleep intervals
 SEARCH_CONFIG = {
     "num_results": 10,
-    "sleep_interval_min": 5,
-    "sleep_interval_max": 15,
+    "sleep_interval_min": 20, # Increased to avoid rate limiting
+    "sleep_interval_max": 40, # Increased to avoid rate limiting
     "lang": "en"
 }
