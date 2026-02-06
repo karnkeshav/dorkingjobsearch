@@ -1,0 +1,4 @@
+pdfminer.six
+googlesearch-python
+pandas
+requests
