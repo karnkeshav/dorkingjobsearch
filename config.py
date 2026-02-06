@@ -7,14 +7,7 @@ Stores keywords, dork patterns, and other constants.
 
 # Keywords to extract from resume or fallback to
 TARGET_KEYWORDS = [
-    "Strategic Roadmap",
-    "P&L Management",
-    "AI Governance",
-    "Cloud FinOps",
-    "Operational Resilience",
-    "$30M+ Savings",
-    "Agentic AI",
-    "AI"
+ "Software"
 ]
 
 # Google Dork Templates
