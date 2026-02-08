@@ -1,0 +1,32 @@
+name: Execute Job Search
+on:
+  workflow_dispatch: # Allows you to run it manually from the Actions tab
+
+jobs:
+  run-search:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install python-docx  # Necessary for your Resume.docx
+
+      - name: Run Job Search Engine
+        run: python main.py
+
+      - name: Upload Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: job-search-results
+          path: |
+            jobs.csv
+            hiring_signals.txt
