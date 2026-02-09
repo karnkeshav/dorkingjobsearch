@@ -2,7 +2,7 @@
   "timezone": "Asia/Kolkata",
   "schedule_window": {
     "start_hour": 9,
-    "end_hour": 23
+    "end_hour": 24
   },
   "keywords": {
     "titles": ["Director", "Head", "Principal"],
