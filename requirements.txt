@@ -1,5 +1,5 @@
-pdfminer.six
-googlesearch-python
-pandas
 requests
-python-docx
+beautifulsoup4
+pytz
+google-api-python-client
+python-telegram-bot

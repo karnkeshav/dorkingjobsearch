@@ -1,71 +1,101 @@
-# DorkingJobSearch: The Job Intelligence Engine
+# Director-Level Job Radar
 
-An automated tool for discovering "hidden" executive job listings that are not easily found on standard job boards. This project is designed for Senior IT Executives (Director/Senior Director level) to find unlisted roles and detect hiring intent.
+A fully automated, stateful job discovery system that detects real **Director / Head / Principal** roles in **Platform / Cloud / SRE / DevOps** (India/Remote) as soon as they are published and sends Telegram notifications.
 
-## Features
+This system runs entirely on **GitHub Free Tier** using GitHub Actions.
 
-*   **Resume Parsing:** Extracts high-value keywords from your PDF resume using `pdfminer.six`.
-*   **Smart Dorking:** Generates dynamic Google Dork queries to find ATS listings (Greenhouse, Lever, Ashby), hidden Google Docs, and internal career pages.
-*   **Hiring Signals:** Generates Boolean search strings to find hiring managers on LinkedIn.
-*   **Verification:** Validates found URLs and provides placeholders for company enrichment (layoffs, funding).
-*   **Rate Limiting:** Uses random sleep intervals to mimic human behavior.
+## 🚀 Features
 
-## Installation
+*   **Multi-Source Discovery:**
+    *   **Google X-Ray:** Uses Custom Search JSON API (with fallback logic).
+    *   **Bing X-Ray:** Uses Bing Search API (with fallback logic).
+    *   **Career Site Crawling:** Scrapes configurable company career pages (JSON-LD aware).
+*   **Smart Filtering:**
+    *   **Titles:** Director, Head, Principal
+    *   **Domains:** Platform, Cloud, SRE, DevOps
+    *   **Locations:** India, Remote
+*   **Persistence:** Remembers seen jobs in `data/seen_jobs.json` to prevent duplicate alerts.
+*   **Scheduling:** Runs every 2 hours within the **09:00–23:00 IST** window.
+*   **Notifications:** Sends a consolidated digest to Telegram.
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/yourusername/dorkingjobsearch.git
-    cd dorkingjobsearch
-    ```
+## 📂 Project Structure
 
-2.  **Install dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-3.  **Prepare your Resume:**
-    *   Place your `resume.pdf` in the root directory.
-
-## Usage
-
-Run the main script:
-
-```bash
-python main.py
+```
+/
+├── README.md                  # Documentation
+├── index.html                 # Status page
+├── config/
+│   └── settings.json          # Keywords, career sites, timezone
+├── scripts/
+│   ├── google_xray.py         # Google search logic
+│   ├── bing_xray.py           # Bing search logic
+│   ├── career_crawler.py      # Company site crawler
+│   ├── dedupe.py              # Deduplication logic
+│   ├── notifier.py            # Telegram sender
+│   └── main.py                # Orchestrator
+├── data/
+│   └── seen_jobs.json         # Persistent state
+├── logs/
+│   └── latest.log             # Execution logs
+├── .github/workflows/
+│   └── scheduler.yml          # Automation workflow
+└── requirements.txt
 ```
 
-### Output
+## 🛠 Setup Instructions
 
-*   `jobs.csv`: Contains found job listings with Company, Source URL, and enrichment data.
-*   `hiring_signals.txt`: Contains Boolean search strings for LinkedIn/PhantomBuster.
+### 1. Fork this Repository
+Click the **Fork** button at the top right of this page.
 
-## Configuration
+### 2. Enable Read & Write Permissions (CRITICAL)
+GitHub Actions defaults to read-only. To allow the script to save state:
+1.  Go to **Settings** → **Actions** → **General**.
+2.  Scroll to **Workflow permissions**.
+3.  Select **Read and write permissions**.
+4.  Click **Save**.
 
-Edit `config.py` to customize:
-*   `TARGET_KEYWORDS`: Default keywords if resume parsing misses them.
-*   `DORK_TEMPLATES`: Add or modify search patterns.
-*   `SEARCH_CONFIG`: Adjust search depth and sleep intervals.
+### 3. Configure Telegram Bot
+1.  Open Telegram and search for **@BotFather**.
+2.  Send `/newbot` and follow the prompts.
+3.  Copy the **HTTP API Token**. This is your `TELEGRAM_BOT_TOKEN`.
+4.  Start a chat with your new bot (or add it to a group).
+5.  Get your **Chat ID**:
+    *   Visit `https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates`
+    *   Look for `"chat": {"id": 123456789, ...}`. This number is your `TELEGRAM_CHAT_ID`.
 
-## The "Hybrid Intelligence" Workflow (PhantomBuster)
+### 4. Get Google Custom Search API Key (Free)
+1.  Go to the [Google Cloud Console](https://console.cloud.google.com/).
+2.  Create a project and enable the **Custom Search API**.
+3.  Create an **API Key**. This is `GOOGLE_API_KEY`.
+4.  Go to [Programmable Search Engine](https://programmablesearchengine.google.com/).
+5.  Create a search engine:
+    *   **Sites to search:** `linkedin.com/jobs`
+    *   **Name:** Job Radar
+6.  Get the **Search Engine ID** (cx). This is `GOOGLE_CX_ID`.
 
-Since aggressive LinkedIn scraping can lead to bans, use this hybrid approach:
+*(Optional: For Bing X-Ray, get a [Bing Search API Key](https://azure.microsoft.com/en-us/services/cognitive-services/bing-web-search-api/) for `BING_API_KEY`)*
 
-1.  **Find Companies:** Use this Python tool (`main.py`) to generate a list of target companies via Google Dorking.
-2.  **Find People:** Use **PhantomBuster** for the "social web".
-    *   **Step 1:** Copy the generated Boolean strings from `hiring_signals.txt`.
-    *   **Step 2:** Feed the identified companies into PhantomBuster's "LinkedIn Company Employees Export".
-    *   **Step 3:** Filter for titles like "CTO", "CIO", "VP of Engineering".
-    *   **Step 4:** This gives you authentic hiring manager data.
+### 5. Set GitHub Secrets
+Go to **Settings** → **Secrets and variables** → **Actions** → **New repository secret**. Add:
 
-## Modules
+| Name | Value |
+| :--- | :--- |
+| `TELEGRAM_BOT_TOKEN` | Your Telegram Bot Token |
+| `TELEGRAM_CHAT_ID` | Your Telegram Chat ID |
+| `GOOGLE_API_KEY` | Your Google API Key |
+| `GOOGLE_CX_ID` | Your Google Search Engine ID |
+| `BING_API_KEY` | (Optional) Your Bing API Key |
 
-*   `main.py`: Orchestrator.
-*   `parser.py`: Resume keyword extraction.
-*   `searcher.py`: Google Dork generation and execution.
-*   `signals.py`: Signal detection logic.
-*   `verifier.py`: Link validation and enrichment.
-*   `config.py`: Configuration settings.
+### 6. Enable Automation
+Go to the **Actions** tab in GitHub and ensure workflows are enabled. You can manually trigger the "Director-Level Job Radar" workflow to test it immediately.
 
-## Disclaimer
+## ⚙️ Configuration
+Edit `config/settings.json` to customize:
+*   **Keywords:** Titles, Domains, Locations.
+*   **Schedule Window:** Start/End hours.
+*   **Career Sites:** List of URLs to crawl.
 
-This tool is for educational and personal use. Respect website Terms of Service.
+## ⚠️ Notes
+*   **Timezone:** The script runs on IST (Asia/Kolkata).
+*   **Failures:** If one source fails (e.g., Google API quota exceeded), others will continue running.
+*   **Free Tier Limits:** Google Custom Search API allows 100 queries/day for free. Adjust scheduling if needed.

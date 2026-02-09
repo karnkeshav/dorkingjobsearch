@@ -1,5 +1,6 @@
 __pycache__/
 *.pyc
-*.csv
-hiring_signals.txt
-resume.pdf
+*.env
+logs/
+.DS_Store
+# Do NOT ignore data/seen_jobs.json - persistence is key

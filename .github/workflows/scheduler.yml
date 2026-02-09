@@ -1,0 +1,52 @@
+name: Director-Level Job Radar
+
+on:
+  schedule:
+    # Run every 2 hours
+    - cron: '0 */2 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  job-discovery:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run Job Discovery
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          GOOGLE_CX_ID: ${{ secrets.GOOGLE_CX_ID }}
+          BING_API_KEY: ${{ secrets.BING_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python scripts/main.py > logs/latest.log 2>&1
+          cat logs/latest.log
+
+      - name: Commit and Push State
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+          # Only commit if data/seen_jobs.json changed
+          if [[ -n $(git status -s data/seen_jobs.json) ]]; then
+            git add data/seen_jobs.json
+            git commit -m "Update seen jobs [skip ci]"
+            git push
+          else
+            echo "No changes to seen_jobs.json"
+          fi
