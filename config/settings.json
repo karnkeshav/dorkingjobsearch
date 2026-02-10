@@ -6,32 +6,40 @@
   },
   "keywords": {
     "titles": ["Director", "Senior Director", "Head of IT", "Principal"],
-    "domains": ["Platform", "Cloud", "SRE","ITSM", "DevOps"],
-    "locations": ["India", "Remote"]
+    "domains": ["Platform", "Cloud", "SRE", "ITSM", "DevOps"],
+    "locations": ["India", "Remote India", "Gurgaon", "Gurugram", "Noida"]
   },
+  "exclude_titles": ["Manager", "Lead", "Architect", "Consultant"],
   "career_sites": [
-   "https://careers.microsoft.com",
-"https://www.amazon.jobs",
-"https://careers.linkedin.com",
-"https://www.metacareers.com",
-"https://careers.google.com",
-"https://www.ibm.com/in-en/employment",
-"https://www.oracle.com/corporate/careers/",
-"https://www.cisco.com/c/en/us/about/careers.html",
-"https://www.genpact.com/careers",
-"https://www.accenture.com/in-en/careers",
-"https://www.adobe.com/careers.html",
-"https://www.barclays.co.uk/careers",
-"https://www.spglobal.com/careers",
-"https://www.nestle.in/careers",
-"https://www.pepsicojobs.com",
-"https://careers.honeywell.com",
-"https://www.mckinsey.com/careers",
-"https://www.pwc.com/in/en/careers.html",
-"https://www.salesforce.com/company/careers/locations/india/"
+    "https://careers.microsoft.com",
+    "https://www.amazon.jobs",
+    "https://careers.linkedin.com",
+    "https://www.metacareers.com",
+    "https://careers.google.com",
+    "https://www.ibm.com/in-en/employment",
+    "https://www.oracle.com/corporate/careers/",
+    "https://www.cisco.com/c/en/us/about/careers.html",
+    "https://www.genpact.com/careers",
+    "https://www.accenture.com/in-en/careers",
+    "https://www.adobe.com/careers.html",
+    "https://www.barclays.co.uk/careers",
+    "https://www.spglobal.com/careers",
+    "https://www.nestle.in/careers",
+    "https://www.pepsicojobs.com",
+    "https://careers.honeywell.com",
+    "https://www.mckinsey.com/careers",
+    "https://www.pwc.com/in/en/careers.html",
+    "https://www.salesforce.com/company/careers/locations/india/"
   ],
   "google_alerts": {
     "enabled": true,
-    "feed_urls": []
+    "feed_urls": [
+      "https://www.google.com/alerts/feeds/06806792860703924346/14337816908978335546",
+      "https://www.google.com/alerts/feeds/06806792860703924346/14293769372177644771",
+      "https://www.google.com/alerts/feeds/06806792860703924346/4527325153346717219",
+      "https://www.google.com/alerts/feeds/06806792860703924346/9467512572572831904",
+      "https://www.google.com/alerts/feeds/06806792860703924346/8490923494402149398",
+      "https://www.google.com/alerts/feeds/06806792860703924346/3117066257139644590"
+    ]
   }
 }
