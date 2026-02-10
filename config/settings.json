@@ -5,15 +5,30 @@
     "end_hour": 23
   },
   "keywords": {
-    "titles": ["Director", "Head", "Principal"],
-    "domains": ["Platform", "Cloud", "SRE", "DevOps"],
+    "titles": ["Director", "Senior Director", "Head of IT", "Principal"],
+    "domains": ["Platform", "Cloud", "SRE","ITSM", "DevOps"],
     "locations": ["India", "Remote"]
   },
   "career_sites": [
-    "https://careers.google.com",
-    "https://careers.microsoft.com",
-    "https://jobs.netflix.com",
-    "https://www.amazon.jobs/en"
+   "https://careers.microsoft.com",
+"https://www.amazon.jobs",
+"https://careers.linkedin.com",
+"https://www.metacareers.com",
+"https://careers.google.com",
+"https://www.ibm.com/in-en/employment",
+"https://www.oracle.com/corporate/careers/",
+"https://www.cisco.com/c/en/us/about/careers.html",
+"https://www.genpact.com/careers",
+"https://www.accenture.com/in-en/careers",
+"https://www.adobe.com/careers.html",
+"https://www.barclays.co.uk/careers",
+"https://www.spglobal.com/careers",
+"https://www.nestle.in/careers",
+"https://www.pepsicojobs.com",
+"https://careers.honeywell.com",
+"https://www.mckinsey.com/careers",
+"https://www.pwc.com/in/en/careers.html",
+"https://www.salesforce.com/company/careers/locations/india/"
   ],
   "google_alerts": {
     "enabled": true,
