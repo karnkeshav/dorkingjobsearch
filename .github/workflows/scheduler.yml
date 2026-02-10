@@ -28,9 +28,6 @@ jobs:
 
       - name: Run Job Discovery
         env:
-          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-          GOOGLE_CX_ID: ${{ secrets.GOOGLE_CX_ID }}
-          BING_API_KEY: ${{ secrets.BING_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
@@ -46,7 +43,8 @@ jobs:
           if [[ -n $(git status -s data/seen_jobs.json) ]]; then
             git add data/seen_jobs.json
             git commit -m "Update seen jobs [skip ci]"
-            git push
+            # Explicitly push to the current branch (HEAD) on origin
+            git push origin HEAD:${{ github.ref }}
           else
             echo "No changes to seen_jobs.json"
           fi

@@ -1,5 +1,4 @@
 requests
 beautifulsoup4
 pytz
-google-api-python-client
-python-telegram-bot
+feedparser

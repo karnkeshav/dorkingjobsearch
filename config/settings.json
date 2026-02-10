@@ -2,7 +2,7 @@
   "timezone": "Asia/Kolkata",
   "schedule_window": {
     "start_hour": 9,
-    "end_hour": 24
+    "end_hour": 23
   },
   "keywords": {
     "titles": ["Director", "Head", "Principal"],
@@ -15,8 +15,8 @@
     "https://jobs.netflix.com",
     "https://www.amazon.jobs/en"
   ],
-  "search_config": {
-    "google_cx": "YOUR_GOOGLE_CX_ID",
-    "bing_subscription_key": "YOUR_BING_KEY"
+  "google_alerts": {
+    "enabled": true,
+    "feed_urls": []
   }
 }

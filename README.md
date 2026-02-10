@@ -2,14 +2,12 @@
 
 A fully automated, stateful job discovery system that detects real **Director / Head / Principal** roles in **Platform / Cloud / SRE / DevOps** (India/Remote) as soon as they are published and sends Telegram notifications.
 
-This system runs entirely on **GitHub Free Tier** using GitHub Actions.
+This system runs entirely on **GitHub Free Tier** using GitHub Actions, **requiring zero billing** (no Google/Bing API keys).
 
 ## 🚀 Features
 
-*   **Multi-Source Discovery:**
-    *   **Google X-Ray:** Uses Custom Search JSON API (with fallback logic).
-    *   **Bing X-Ray:** Uses Bing Search API (with fallback logic).
-    *   **Career Site Crawling:** Scrapes configurable company career pages (JSON-LD aware).
+*   **Primary Discovery (Career Sites):** Direct crawling of company career pages using JSON-LD parsing and link scanning.
+*   **Secondary Discovery (Google Alerts):** Ingests jobs via Google Alerts RSS feeds (user-configured).
 *   **Smart Filtering:**
     *   **Titles:** Director, Head, Principal
     *   **Domains:** Platform, Cloud, SRE, DevOps
@@ -25,11 +23,10 @@ This system runs entirely on **GitHub Free Tier** using GitHub Actions.
 ├── README.md                  # Documentation
 ├── index.html                 # Status page
 ├── config/
-│   └── settings.json          # Keywords, career sites, timezone
+│   └── settings.json          # Keywords, career sites, alerts, timezone
 ├── scripts/
-│   ├── google_xray.py         # Google search logic
-│   ├── bing_xray.py           # Bing search logic
-│   ├── career_crawler.py      # Company site crawler
+│   ├── career_crawler.py      # Main discovery engine (JSON-LD aware)
+│   ├── google_alerts_ingest.py# Google Alerts RSS parser
 │   ├── dedupe.py              # Deduplication logic
 │   ├── notifier.py            # Telegram sender
 │   └── main.py                # Orchestrator
@@ -41,6 +38,8 @@ This system runs entirely on **GitHub Free Tier** using GitHub Actions.
 │   └── scheduler.yml          # Automation workflow
 └── requirements.txt
 ```
+
+*(Note: `google_xray.py` and `bing_xray.py` are deprecated.)*
 
 ## 🛠 Setup Instructions
 
@@ -63,39 +62,47 @@ GitHub Actions defaults to read-only. To allow the script to save state:
     *   Visit `https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates`
     *   Look for `"chat": {"id": 123456789, ...}`. This number is your `TELEGRAM_CHAT_ID`.
 
-### 4. Get Google Custom Search API Key (Free)
-1.  Go to the [Google Cloud Console](https://console.cloud.google.com/).
-2.  Create a project and enable the **Custom Search API**.
-3.  Create an **API Key**. This is `GOOGLE_API_KEY`.
-4.  Go to [Programmable Search Engine](https://programmablesearchengine.google.com/).
-5.  Create a search engine:
-    *   **Sites to search:** `linkedin.com/jobs`
-    *   **Name:** Job Radar
-6.  Get the **Search Engine ID** (cx). This is `GOOGLE_CX_ID`.
-
-*(Optional: For Bing X-Ray, get a [Bing Search API Key](https://azure.microsoft.com/en-us/services/cognitive-services/bing-web-search-api/) for `BING_API_KEY`)*
-
-### 5. Set GitHub Secrets
+### 4. Set GitHub Secrets
 Go to **Settings** → **Secrets and variables** → **Actions** → **New repository secret**. Add:
 
 | Name | Value |
 | :--- | :--- |
 | `TELEGRAM_BOT_TOKEN` | Your Telegram Bot Token |
 | `TELEGRAM_CHAT_ID` | Your Telegram Chat ID |
-| `GOOGLE_API_KEY` | Your Google API Key |
-| `GOOGLE_CX_ID` | Your Google Search Engine ID |
-| `BING_API_KEY` | (Optional) Your Bing API Key |
+
+### 5. Configure Job Sources (`config/settings.json`)
+
+#### A. Add Career Sites
+Add the URLs of career pages you want to monitor to the `career_sites` array.
+```json
+"career_sites": [
+  "https://careers.google.com",
+  "https://jobs.netflix.com",
+  "https://www.your-target-company.com/careers"
+]
+```
+
+#### B. Setup Google Alerts (Optional)
+1.  Go to [Google Alerts](https://www.google.com/alerts).
+2.  Create an alert for your query (e.g., `site:linkedin.com/jobs "Director" "Platform" India`).
+3.  Click **Show options**.
+4.  Under **Deliver to**, select **RSS Feed**.
+5.  Click **Create Alert**.
+6.  Right-click the RSS icon next to your new alert and **Copy Link Address**.
+7.  Add this URL to `config/settings.json`:
+```json
+"google_alerts": {
+  "enabled": true,
+  "feed_urls": [
+    "https://www.google.com/alerts/feeds/..."
+  ]
+}
+```
 
 ### 6. Enable Automation
 Go to the **Actions** tab in GitHub and ensure workflows are enabled. You can manually trigger the "Director-Level Job Radar" workflow to test it immediately.
 
-## ⚙️ Configuration
-Edit `config/settings.json` to customize:
-*   **Keywords:** Titles, Domains, Locations.
-*   **Schedule Window:** Start/End hours.
-*   **Career Sites:** List of URLs to crawl.
-
 ## ⚠️ Notes
 *   **Timezone:** The script runs on IST (Asia/Kolkata).
-*   **Failures:** If one source fails (e.g., Google API quota exceeded), others will continue running.
-*   **Free Tier Limits:** Google Custom Search API allows 100 queries/day for free. Adjust scheduling if needed.
+*   **Limitations:** Some career sites heavily reliant on JavaScript (SPA) might not be fully scraped. The crawler attempts to parse JSON-LD metadata which works on many modern sites, but headless browsing is disabled to run on free tier.
+*   **Zero Billing:** This system uses no paid APIs. It relies on standard web requests and public RSS feeds.

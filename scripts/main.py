@@ -9,9 +9,14 @@ import sys
 # Add the parent directory (project root) to sys.path so we can import 'scripts'
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from scripts.google_xray import run as run_google
-from scripts.bing_xray import run as run_bing
+# Imports for job discovery
 from scripts.career_crawler import run as run_crawler
+from scripts.google_alerts_ingest import run as run_alerts
+
+# Deprecated imports (optional, can just remove)
+# from scripts.google_xray import run as run_google
+# from scripts.bing_xray import run as run_bing
+
 from scripts.dedupe import deduplicate
 from scripts.notifier import send_telegram_digest
 
@@ -53,25 +58,7 @@ async def orchestrate():
 
     all_jobs = []
 
-    # 1. Google X-Ray
-    try:
-        logging.info("Starting Google X-Ray...")
-        google_jobs = run_google()
-        logging.info(f"Google X-Ray found {len(google_jobs)} jobs.")
-        all_jobs.extend(google_jobs)
-    except Exception as e:
-        logging.error(f"Google X-Ray failed: {e}")
-
-    # 2. Bing X-Ray
-    try:
-        logging.info("Starting Bing X-Ray...")
-        bing_jobs = run_bing()
-        logging.info(f"Bing X-Ray found {len(bing_jobs)} jobs.")
-        all_jobs.extend(bing_jobs)
-    except Exception as e:
-        logging.error(f"Bing X-Ray failed: {e}")
-
-    # 3. Career Site Crawler
+    # 1. Career Site Crawler (Primary Source)
     try:
         logging.info("Starting Career Site Crawler...")
         site_jobs = run_crawler()
@@ -80,16 +67,25 @@ async def orchestrate():
     except Exception as e:
         logging.error(f"Career Site Crawler failed: {e}")
 
+    # 2. Google Alerts Ingestion (Secondary Source)
+    try:
+        logging.info("Starting Google Alerts Ingestion...")
+        alert_jobs = run_alerts()
+        logging.info(f"Google Alerts found {len(alert_jobs)} jobs.")
+        all_jobs.extend(alert_jobs)
+    except Exception as e:
+        logging.error(f"Google Alerts Ingestion failed: {e}")
+
     logging.info(f"Total raw jobs found: {len(all_jobs)}")
 
-    # 4. Deduplicate
+    # 3. Deduplicate
     unique_jobs = deduplicate(all_jobs)
 
     if not unique_jobs:
         logging.info("No new unique jobs found.")
         return
 
-    # 5. Notify
+    # 4. Notify
     try:
         logging.info(f"Sending notification for {len(unique_jobs)} new jobs...")
         await send_telegram_digest(unique_jobs)
