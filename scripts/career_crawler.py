@@ -141,6 +141,21 @@ def is_target_job(title, location=""):
     title_lower = title.lower()
     loc_lower = location.lower()
 
+    has_title = any(t.lower() in title_lower for t in CONFIG['keywords']['titles'])
+    has_domain = any(d.lower() in title_lower for d in CONFIG['keywords']['domains'])
+    
+    # NEW LOGIC: Pass if location is found OR if it's a fallback "See Link"
+    target_locations = CONFIG['keywords']['locations']
+    has_location = any(l.lower() in title_lower or l.lower() in loc_lower for l in target_locations)
+    
+    is_fallback = "see link" in loc_lower
+    
+    return has_title and has_domain and (has_location or is_fallback)
+    
+
+    title_lower = title.lower()
+    loc_lower = location.lower()
+
     # Check Title Keywords
     has_title = any(t.lower() in title_lower for t in CONFIG['keywords']['titles'])
 
