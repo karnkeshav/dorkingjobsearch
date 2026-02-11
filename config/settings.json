@@ -17,6 +17,10 @@
   ],
   "google_alerts": {
     "enabled": true,
-    "feed_urls": []
+    "feed_urls": [
+"https://www.google.com/alerts/feeds/06806792860703924346/10783015978077230094",
+      "https://www.google.com/alerts/feeds/06806792860703924346/14293769372177644771",
+      
+    ]
   }
 }
