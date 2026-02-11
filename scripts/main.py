@@ -13,10 +13,6 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.career_crawler import run as run_crawler
 from scripts.google_alerts_ingest import run as run_alerts
 
-# Deprecated imports (optional, can just remove)
-# from scripts.google_xray import run as run_google
-# from scripts.bing_xray import run as run_bing
-
 from scripts.dedupe import deduplicate
 from scripts.notifier import send_telegram_digest
 
@@ -29,8 +25,13 @@ def load_config():
         return json.load(f)
 
 def check_time_window(config):
+    # ADDED: Manual trigger bypass for testing
+    if os.environ.get('IGNORE_TIME_WINDOW') == 'true':
+        logging.info("Manual trigger detected: Bypassing time window check.")
+        return True
+
     try:
-        tz = pytz.timezone(config.get('timezone', 'UTC'))
+        tz = pytz.timezone(config.get('timezone', 'Asia/Kolkata'))
         now = datetime.now(tz)
 
         schedule = config.get('schedule_window', {})
