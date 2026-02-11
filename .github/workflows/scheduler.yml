@@ -30,10 +30,10 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          # This variable allows you to test the script manually outside the 9-23 window
+          IGNORE_TIME_WINDOW: ${{ github.event_name == 'workflow_dispatch' && 'true' || 'false' }}
         run: |
           python scripts/main.py
-
-         
 
       - name: Commit and Push State
         run: |
