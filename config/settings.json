@@ -6,7 +6,7 @@
   },
   "keywords": {
     "titles": ["Director", "Head", "Principal"],
-    "domains": ["Platform", "Cloud", "SRE", "DevOps"],
+    "domains": ["Platform", "Cloud", "SRE", "ITSM", "DevOps"],
     "locations": ["India", "Remote"]
   },
   "career_sites": [
@@ -19,7 +19,9 @@
     "enabled": true,
     "feed_urls": [
 "https://www.google.com/alerts/feeds/06806792860703924346/10783015978077230094",
-      "https://www.google.com/alerts/feeds/06806792860703924346/14293769372177644771",
+      
+      "https://www.google.com/alerts/feeds/06806792860703924346/14293769372177644771"
+      
       
     ]
   }
